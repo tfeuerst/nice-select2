@@ -57,9 +57,9 @@ export default function NiceSelect(element, options) {
   this.selectedOptions = [];
 
   this.placeholder =
-    attr(this.el, "placeholder") ||
-    this.config.placeholder ||
-    "Select an option";
+      attr(this.el, "placeholder") ||
+      this.config.placeholder ||
+      "Select an option";
 
   this.dropdown = null;
   this.multiple = attr(this.el, "multiple");
@@ -82,13 +82,13 @@ NiceSelect.prototype.create = function() {
 
 NiceSelect.prototype.processData = function(data) {
   var options = [];
-  data.forEach(item=> {
+  data.forEach(item => {
     options.push({
       data: item,
       attributes: {
-        selected: false,
-        disabled: false,
-		optgroup: item.value == 'optgroup'
+        selected: !!item.selected,
+        disabled: !!item.disabled,
+        optgroup: item.value == 'optgroup'
       }
     });
   });
@@ -102,23 +102,24 @@ NiceSelect.prototype.extractData = function() {
   var selectedOptions = [];
 
   options.forEach(item => {
-	if(item.tagName == 'OPTGROUP'){
-		var itemData = {
-		  text: item.label,
-		  value: 'optgroup'
-		};
-	}else{
-		var itemData = {
-		  text: item.innerText,
-		  value: item.value
-		};
-
-	}
+    if(item.tagName == 'OPTGROUP'){
+      var itemData = {
+        text: item.label,
+        value: 'optgroup'
+      };
+    } else {
+      var itemData = {
+        text: item.innerText,
+        value: item.value,
+        selected: item.getAttribute("selected") != null || this.el.value == item.value,
+        disabled: item.getAttribute("disabled") != null
+      };
+    }
 
     var attributes = {
-      selected: item.getAttribute("selected") != null,
+      selected: item.getAttribute("selected") != null || this.el.value == item.value,
       disabled: item.getAttribute("disabled") != null,
-	  optgroup: item.tagName == 'OPTGROUP'
+      optgroup: item.tagName == 'OPTGROUP'
     };
 
     data.push(itemData);
@@ -147,7 +148,7 @@ NiceSelect.prototype.renderDropdown = function() {
 </div>`;
 
   var html = `<div class="${classes.join(" ")}" tabindex="${
-    this.disabled ? null : 0
+      this.disabled ? null : 0
   }">
   <span class="${this.multiple ? "multiple-options" : "current"}"></span>
   <div class="nice-select-dropdown">
@@ -164,23 +165,23 @@ NiceSelect.prototype.renderDropdown = function() {
 };
 
 NiceSelect.prototype._renderSelectedItems = function() {
-  if (this.multiple) {
+  if(this.multiple) {
     var selectedHtml = "";
-	if(window.getComputedStyle(this.dropdown).width == 'auto' || this.selectedOptions.length <2){
-		this.selectedOptions.forEach(function(item) {
-		  selectedHtml += `<span class="current">${item.data.text}</span>`;
-		});
-		selectedHtml = selectedHtml == "" ? this.placeholder : selectedHtml;
-	}else{
-		selectedHtml = this.selectedOptions.length+' selected';
-	}
-	
+    if(window.getComputedStyle(this.dropdown).width == 'auto' || this.selectedOptions.length <2) {
+      this.selectedOptions.forEach(function(item) {
+        selectedHtml += `<span class="current">${item.data.text}</span>`;
+      });
+      selectedHtml = selectedHtml == "" ? this.placeholder : selectedHtml;
+    } else {
+      selectedHtml = this.selectedOptions.length+' selected';
+    }
+
     this.dropdown.querySelector(".multiple-options").innerHTML = selectedHtml;
   } else {
     var html =
-      this.selectedOptions.length > 0
-        ? this.selectedOptions[0].data.text
-        : this.placeholder;
+        this.selectedOptions.length > 0
+            ? this.selectedOptions[0].data.text
+            : this.placeholder;
 
     this.dropdown.querySelector(".current").innerHTML = html;
   }
@@ -196,18 +197,19 @@ NiceSelect.prototype._renderItems = function() {
 NiceSelect.prototype._renderItem = function(option) {
   var el = document.createElement("li");
   el.innerHTML = option.data.text;
+
   if(option.attributes.optgroup){
-	  el.classList.add('optgroup');
-  }else{
- 	el.setAttribute("data-value", option.data.value);
-	var classList = [
-		"option",
-		option.attributes.selected ? "selected" : null,
-		option.attributes.disabled ? "disabled" : null,
-	];
-	
-	el.addEventListener("click", this._onItemClicked.bind(this, option));
-	el.classList.add(...classList);
+    el.classList.add('optgroup');
+  } else {
+    el.setAttribute("data-value", option.data.value);
+    var classList = [
+      "option",
+      option.attributes.selected ? "selected" : null,
+      option.attributes.disabled ? "disabled" : null,
+    ].filter(Boolean);
+
+    el.addEventListener("click", this._onItemClicked.bind(this, option));
+    el.classList.add(...classList);
   }
 
   option.element = el;
@@ -280,11 +282,11 @@ NiceSelect.prototype._bindSearchEvent = function() {
 };
 
 NiceSelect.prototype._onClicked = function(e) {
-	if (this.multiple) {
-		this.dropdown.classList.add("open");
-	}else{
-		this.dropdown.classList.toggle("open");
-	}
+  if (this.multiple) {
+    this.dropdown.classList.add("open");
+  } else {
+    this.dropdown.classList.toggle("open");
+  }
 
   if (this.dropdown.classList.contains("open")) {
     var search = this.dropdown.querySelector(".nice-select-search");
@@ -311,10 +313,10 @@ NiceSelect.prototype._onItemClicked = function(option, e) {
   if (!hasClass(optionEl, "disabled")) {
     if (this.multiple) {
       if (hasClass(optionEl, "selected")) {
-		removeClass(optionEl, "selected");
-		this.selectedOptions.splice(this.selectedOptions.indexOf(option),1);
-		this.el.querySelector('option[value="' + optionEl.dataset.value + '"]').removeAttribute('selected');
-	  }else{
+        removeClass(optionEl, "selected");
+        this.selectedOptions.splice(this.selectedOptions.indexOf(option),1);
+        this.el.querySelector('option[value="' + optionEl.dataset.value + '"]').removeAttribute('selected');
+      } else {
         addClass(optionEl, "selected");
         this.selectedOptions.push(option);
       }
@@ -338,8 +340,8 @@ NiceSelect.prototype.updateSelectValue = function() {
     this.selectedOptions.forEach(function(item) {
       var el = select.querySelector('option[value="' + item.data.value + '"]');
       if (el){
-		  el.setAttribute("selected", true);
-	  }
+        el.setAttribute("selected", true);
+      }
     });
   } else if (this.selectedOptions.length > 0) {
     this.el.value = this.selectedOptions[0].data.value;
@@ -360,8 +362,8 @@ NiceSelect.prototype._onKeyPressed = function(e) {
 
   var open = this.dropdown.classList.contains("open");
 
-  // Space or Enter
-  if (e.keyCode == 32 || e.keyCode == 13) {
+  // Enter
+  if (e.keyCode == 13) {
     if (open) {
       triggerClick(focusedOption);
     } else {
@@ -396,6 +398,9 @@ NiceSelect.prototype._onKeyPressed = function(e) {
   } else if (e.keyCode == 27 && open) {
     // Esc
     triggerClick(this.dropdown);
+  } else if(e.keyCode === 32 && open) {
+    // Space
+    return false;
   }
   return false;
 };
