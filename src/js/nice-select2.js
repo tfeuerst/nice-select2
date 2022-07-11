@@ -244,9 +244,11 @@ NiceSelect.prototype.enable = function() {
 };
 
 NiceSelect.prototype.clear = function() {
+  this.resetSelectValue();
   this.selectedOptions = [];
   this._renderSelectedItems();
-  this.updateSelectValue();
+  this.update();
+
   triggerChange(this.el);
 };
 
@@ -346,6 +348,24 @@ NiceSelect.prototype.updateSelectValue = function() {
   } else if (this.selectedOptions.length > 0) {
     this.el.value = this.selectedOptions[0].data.value;
   }
+  triggerChange(this.el);
+};
+
+NiceSelect.prototype.resetSelectValue = function() {
+  if (this.multiple) {
+    var select = this.el;
+    this.selectedOptions.forEach(function(item) {
+      var el = select.querySelector('option[value="' + item.data.value + '"]');
+      if (el){
+        el.removeAttribute("selected");
+        //removeClass(el, "selected");
+      }
+      //this.el.querySelector('option[value="' + optionEl.dataset.value + '"]').removeAttribute('selected');
+    });
+  } else if (this.selectedOptions.length > 0) {
+    this.el.value = this.selectedOptions[0].data.value;
+  }
+
   triggerChange(this.el);
 };
 
