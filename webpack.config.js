@@ -1,12 +1,13 @@
 //npm install mini-css-extract-plugin sass-loader sass webpack webpack-cli --save-dev
 
 const path = require('path');
+const CopyPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
     entry: {
 		"nice-select2": './src/js/nice-select2.js',
-		style: "./src/scss/style.scss",
+		"style": "./src/scss/style.scss",
 	},
     output: {
 		path: path.resolve(__dirname, 'dist'),
@@ -19,9 +20,16 @@ module.exports = {
     optimization: {
 		usedExports: true,
     },
-	plugins: [new MiniCssExtractPlugin({
-		filename: "css/[name].css",
-    })],
+	plugins: [
+		new CopyPlugin({
+			patterns: [
+				{ from: "dist", to: "../docs/dist", force: true },
+			],
+		}),
+		new MiniCssExtractPlugin({
+			filename: "css/[name].css",
+		}),
+	],
 	module: {
 		rules: [
 		  {
