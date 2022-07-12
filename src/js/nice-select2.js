@@ -358,9 +358,7 @@ NiceSelect.prototype.resetSelectValue = function() {
       var el = select.querySelector('option[value="' + item.data.value + '"]');
       if (el){
         el.removeAttribute("selected");
-        //removeClass(el, "selected");
       }
-      //this.el.querySelector('option[value="' + optionEl.dataset.value + '"]').removeAttribute('selected');
     });
   } else if (this.selectedOptions.length > 0) {
     this.el.value = this.selectedOptions[0].data.value;
