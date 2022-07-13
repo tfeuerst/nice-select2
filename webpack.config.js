@@ -1,7 +1,7 @@
 //npm install mini-css-extract-plugin sass-loader sass webpack webpack-cli --save-dev
 
 const path = require('path');
-const CopyPlugin = require("copy-webpack-plugin");
+const FileManagerPlugin = require('filemanager-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
@@ -21,10 +21,14 @@ module.exports = {
 		usedExports: true,
     },
 	plugins: [
-		new CopyPlugin({
-			patterns: [
-				{ from: "dist", to: "../docs/dist", force: true },
-			],
+		new FileManagerPlugin({
+			events: {
+				onEnd: {
+					copy: [
+						{source: path.resolve(__dirname, 'dist'), destination: path.resolve(__dirname, 'docs/dist')},
+					],
+				},
+			},
 		}),
 		new MiniCssExtractPlugin({
 			filename: "css/[name].css",

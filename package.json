@@ -7,9 +7,9 @@
     "doc": "docs"
   },
   "devDependencies": {
-    "copy-webpack-plugin": "^11.0.0",
     "cross-env": "^7.0.3",
     "css-loader": "^6.7.1",
+    "filemanager-webpack-plugin": "^7.0.0",
     "mini-css-extract-plugin": "^2.4.5",
     "sass": "^1.45.1",
     "sass-loader": "^12.4.0",
@@ -36,7 +36,5 @@
   "bugs": {
     "url": "https://github.com/bluzky/nice-select2/issues"
   },
-  "homepage": "https://github.com/bluzky/nice-select2#readme",
-  "dependencies": {
-  }
+  "homepage": "https://github.com/bluzky/nice-select2#readme"
 }
