@@ -336,6 +336,40 @@ NiceSelect.prototype._onItemClicked = function(option, e) {
   }
 };
 
+NiceSelect.prototype.setValue = function (values) {
+  console.log("this");
+  console.log(this);
+  console.log("this.selectedOptions -> BEFORE");
+  console.log(this.selectedOptions);
+  if (values == null || values == undefined || values == "") {
+    this.clear();
+    return;
+  }
+  else {
+    var foundValues = [];
+    this.options.forEach(function (item) {
+      if (item.attributes.disabled) return;
+      if (values.includes(parseInt(item.data.value))) {
+        console.log(item.data.value + " item pushed");
+        foundValues.push(item);
+      }
+    });
+    if (this.multiple) {
+      console.log("multiple");
+      this.selectedOptions = foundValues;
+    } else {
+      console.log("single");
+      this.selectedOptions = (foundValues.length > 0) ? foundValues[0] : foundValues;
+    }
+  }
+  console.log("this.selectedOptions -> AFTER");
+  console.log(this.selectedOptions);
+  this._renderSelectedItems();
+  this.updateSelectValue();
+  this.update();
+  console.log(this.el.value);
+}
+
 NiceSelect.prototype.updateSelectValue = function() {
   if (this.multiple) {
     var select = this.el;
