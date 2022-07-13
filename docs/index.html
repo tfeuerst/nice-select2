@@ -193,7 +193,7 @@
             <option value="0">Nothing</option>
             <option value="1">Some option</option>
             <option value="2">Another option</option>
-            <option value="3">A disabled option</option>
+            <option value="3" disabled>A disabled option</option>
             <option value="4">Potato</option>
         </select>
     </div>
@@ -203,11 +203,14 @@
             <option value="0">Nothing</option>
             <option value="1">Some option</option>
             <option value="2">Another option</option>
-            <option value="3">A disabled option</option>
+            <option value="3" disabled>A disabled option</option>
             <option value="4">Potato</option>
         </select>
     </div>
 
+    <button id="btn-setvalue">Set Values 1 + 4</button>
+    <button id="btn-setvalueAll">Set All Values</button>
+    <button id="btn-setvalueNone">Set None Values</button>
     <button id="btn-focus">Focus</button>
     <button id="btn-dísable">Disable</button>
     <button id="btn-enable">Enable</button>
@@ -275,6 +278,18 @@
     // Reset
     var single = NiceSelect.bind(document.getElementById("nice-select-single"));
     var multiple = NiceSelect.bind(document.getElementById("nice-select-multiple"));
+    document.querySelector('#btn-setvalue').addEventListener('click', function (e) {
+        single.setValue([1]);
+        multiple.setValue([2,3,4]);
+    });
+    document.querySelector('#btn-setvalueAll').addEventListener('click', function (e) {
+        single.setValue([2]);
+        multiple.setValue(["all"]);
+    });
+    document.querySelector('#btn-setvalueNone').addEventListener('click', function (e) {
+        single.setValue([]);
+        multiple.setValue([]);
+    });
     document.querySelector('#btn-focus').addEventListener('click', function (e) {
         single.focus();
         multiple.focus();
@@ -299,6 +314,7 @@
         single.destroy();
         multiple.destroy();
     });
+
 </script>
 
 </body>
