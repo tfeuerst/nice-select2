@@ -337,6 +337,8 @@ NiceSelect.prototype._onItemClicked = function(option, e) {
 };
 
 NiceSelect.prototype.setValue = function (values) {
+  console.log("setValue: values");
+  console.log(values);
   if (values == null || values == undefined || values == "") {
     this.clear();
     return;
@@ -345,7 +347,7 @@ NiceSelect.prototype.setValue = function (values) {
     var foundValues = [];
     this.options.forEach(function (item) {
       if (item.attributes.disabled) return;
-      if (values.includes(parseInt(item.data.value))) {
+      if (values.includes(item.data.value)) {
         foundValues.push(item);
       }
     });
@@ -355,6 +357,9 @@ NiceSelect.prototype.setValue = function (values) {
       this.selectedOptions = (foundValues.length > 0) ? foundValues[0] : foundValues;
     }
   }
+  console.log("setValue: this.selectedOptions");
+  console.log(this.selectedOptions);
+
   this._renderSelectedItems();
   this.updateSelectValue();
   this.update();

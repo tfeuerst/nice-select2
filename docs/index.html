@@ -208,8 +208,7 @@
         </select>
     </div>
 
-    <button id="btn-setvalue">Set Values 1 + 4</button>
-    <button id="btn-setvalueAll">Set All Values</button>
+    <button id="btn-setvalue">Set Values 2 + 3 (disabled) + 4</button>
     <button id="btn-setvalueNone">Set None Values</button>
     <button id="btn-focus">Focus</button>
     <button id="btn-dísable">Disable</button>
@@ -279,12 +278,8 @@
     var single = NiceSelect.bind(document.getElementById("nice-select-single"));
     var multiple = NiceSelect.bind(document.getElementById("nice-select-multiple"));
     document.querySelector('#btn-setvalue').addEventListener('click', function (e) {
-        single.setValue([1]);
-        multiple.setValue([2,3,4]);
-    });
-    document.querySelector('#btn-setvalueAll').addEventListener('click', function (e) {
-        single.setValue([2]);
-        multiple.setValue(["all"]);
+        single.setValue(['1']);
+        multiple.setValue(['2','3','4']);
     });
     document.querySelector('#btn-setvalueNone').addEventListener('click', function (e) {
         single.setValue([]);
