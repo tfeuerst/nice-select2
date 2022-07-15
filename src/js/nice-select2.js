@@ -337,8 +337,6 @@ NiceSelect.prototype._onItemClicked = function(option, e) {
 };
 
 NiceSelect.prototype.setValue = function (values) {
-  console.log("setValue: values");
-  console.log(values);
   if (values == null || values == undefined || values == "") {
     this.clear();
     return;
@@ -357,12 +355,18 @@ NiceSelect.prototype.setValue = function (values) {
       this.selectedOptions = (foundValues.length > 0) ? foundValues[0] : foundValues;
     }
   }
-  console.log("setValue: this.selectedOptions");
-  console.log(this.selectedOptions);
-
   this._renderSelectedItems();
   this.updateSelectValue();
   this.update();
+}
+
+NiceSelect.prototype.getSelectedData = function() {
+  var selectedItems = [];
+  this.selectedOptions.forEach(function(optionItem){
+      selectedItems.push(optionItem.data.value)
+  });
+
+  return selectedItems;
 }
 
 NiceSelect.prototype.updateSelectValue = function() {
