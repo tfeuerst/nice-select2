@@ -229,6 +229,7 @@
 
     <button id="btn-setvalue">Set Values 2 + 3 (disabled) + 4</button>
     <button id="btn-setvalueNone">Set None Values</button>
+    <button id="btn-setvalueAll">Set All (multi only)</button>
     <button id="btn-focus">Focus</button>
     <button id="btn-dísable">Disable</button>
     <button id="btn-enable">Enable</button>
@@ -299,6 +300,9 @@
     document.querySelector('#btn-setvalue').addEventListener('click', function (e) {
         single.setValue(['1']);
         multiple.setValue(['2','3','4']);
+    });
+    document.querySelector('#btn-setvalueAll').addEventListener('click', function (e) {
+        multiple.setValue('all');
     });
     document.querySelector('#btn-setvalueNone').addEventListener('click', function (e) {
         single.setValue([]);
