@@ -341,20 +341,21 @@ NiceSelect.prototype.setValue = function (values) {
     this.clear();
     return;
   }
-  else {
-    var foundValues = [];
-    this.options.forEach(function (item) {
-      if (item.attributes.disabled) return;
-      if (values.includes(item.data.value)) {
-        foundValues.push(item);
-      }
-    });
-    if (this.multiple) {
-      this.selectedOptions = foundValues;
-    } else {
-      this.selectedOptions = (foundValues.length > 0) ? foundValues[0] : foundValues;
+  var foundValues = [];
+
+  this.options.forEach(function (item) {
+    if (item.attributes.disabled) return;
+    if (values.includes(item.data.value) || values === 'all') {
+      foundValues.push(item);
     }
+  });
+
+  if (this.multiple) {
+    this.selectedOptions = foundValues;
+  } else {
+    this.selectedOptions = (foundValues.length > 0) ? foundValues[0] : foundValues;
   }
+
   this._renderSelectedItems();
   this.updateSelectValue();
   this.update();
